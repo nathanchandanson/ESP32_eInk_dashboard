@@ -1,18 +1,32 @@
 #include <Arduino.h>
+#include "network.hpp"
+#include "data.h"
 
-// put function declarations here:
-int myFunction(int, int);
+//////////////////////////////////////////////////////////////
+// Declaration of APIs
+//////////////////////////////////////////////////////////////
+todoist_API theTodoistAPI;
 
-void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+//////////////////////////////////////////////////////////////
+// Setup
+//////////////////////////////////////////////////////////////
+void setup()
+{
+    // Start Serial communication
+    Serial.begin(9600);
+
+    // Start the wifi connection
+    if(Wifi_connect()!=0){
+        Serial.println("Error while connecting to Wifi");
+        return;
+    }
+
+
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
-}
-
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+void loop()
+{
+    theTodoistAPI.send_request();
+    theTodoistAPI.print_data();
+    delay(10000);
 }
