@@ -9,7 +9,9 @@
 
 #define MAX_SIZE_DATA 2048
 
-/* Functions to connect to the internet */
+//////////////////////////////////////////////////////////////
+// Connection to the Wifi
+//////////////////////////////////////////////////////////////
 int Wifi_connect();
 
 /* Classes for the different integrations*/
@@ -34,7 +36,9 @@ public:
     int get_priority() const { return m_priority; }
 };
 
-/* Classes for the APIs */
+//////////////////////////////////////////////////////////////
+// Classes for the APIs
+//////////////////////////////////////////////////////////////
 /* Generic class */
 class generic_API
 {
@@ -44,14 +48,14 @@ protected:
 
 protected:
     generic_API(): m_request_url("undefined"), m_data()
-    {}
+    {m_data = m_data.to<JsonArray>();}
     generic_API(const char* url_request): m_request_url(url_request), m_data()
     {}
 
 public:
     const char* get_request_url() const { return m_request_url; };
     JsonDocument get_data() const { return m_data; };
-    void print_data() const;
+    virtual void print_data() = 0;
     virtual void send_request() = 0;
 };
 
@@ -66,6 +70,7 @@ public:
     {}
 
     void send_request();
+    void print_data();
 };
 
 #endif
