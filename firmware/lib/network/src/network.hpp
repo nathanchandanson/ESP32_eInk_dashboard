@@ -4,6 +4,7 @@
 #include <WiFi.h>
 #include <ArduinoJson.h>
 #include <HTTPClient.h>
+#include <vector>
 
 #include "../../../include/data.h"
 
@@ -14,25 +15,24 @@
 //////////////////////////////////////////////////////////////
 int Wifi_connect();
 
-/* Classes for the different integrations*/
 /////////////////////////////////////////////////////////////////////
-// Pas mettre ça ici 
+// Classes for the different integrations
 /////////////////////////////////////////////////////////////////////
 class todoist_task
 {
 private:
-    char* m_content;
-    char** m_labels;
+    String m_content;
+    std::vector<String> m_labels;
     int m_priority;
 
 public:
     todoist_task(): m_content(), m_labels(), m_priority()
     {}
-    todoist_task(char* content, char** labels, int priority): m_content(content), m_labels(labels), m_priority(priority)
+    todoist_task(String content, std::vector<String> labels, int priority): m_content(content), m_labels(labels), m_priority(priority)
     {}
 
-    char* get_content() const { return m_content; }
-    char** get_labels() const { return m_labels; }
+    String get_content() const { return m_content; }
+    std::vector<String> get_labels() const { return m_labels; }
     int get_priority() const { return m_priority; }
 };
 
@@ -55,8 +55,8 @@ protected:
 public:
     const char* get_request_url() const { return m_request_url; };
     JsonDocument get_data() const { return m_data; };
-    virtual void print_data() = 0;
     virtual void send_request() = 0;
+    virtual void print_data() = 0;
 };
 
 /* Todoist API class */
@@ -71,6 +71,7 @@ public:
 
     void send_request();
     void print_data();
+    std::vector<todoist_task> get_tasks_from_label(const char* label);
 };
 
 #endif

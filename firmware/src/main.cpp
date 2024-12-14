@@ -26,9 +26,13 @@ void setup()
 
 void loop()
 {
-    Serial.println("A");
+    Serial.println("\nSending the request to the API");
     theTodoistAPI.send_request();
-    Serial.println("B");
-    theTodoistAPI.print_data();
+    Serial.println("\nTasks with A faire label :");
+    std::vector<todoist_task> tasks = theTodoistAPI.get_tasks_from_label("A faire");
+    for(todoist_task task : tasks){
+        Serial.println(task.get_content() + " : " + task.get_priority());
+    }
+
     delay(10000);
 }
