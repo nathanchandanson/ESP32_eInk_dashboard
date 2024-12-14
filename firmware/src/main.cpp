@@ -26,7 +26,9 @@ void setup()
 
 void loop()
 {
+    Serial.println("A");
     theTodoistAPI.send_request();
+    Serial.println("B");
     theTodoistAPI.print_data();
     delay(10000);
 }

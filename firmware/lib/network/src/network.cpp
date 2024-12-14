@@ -1,6 +1,8 @@
 #include "network.hpp"
 
-/* Connect to the given Wifi */
+//////////////////////////////////////////////////////////////
+// Connection to the Wifi
+//////////////////////////////////////////////////////////////
 int Wifi_connect()
 {
     Serial.println("Connecting to the wifi with SSID :" + String(NETWORK_SSID));
@@ -21,17 +23,9 @@ int Wifi_connect()
     return 0;
 }
 
-/* Methods of the generic API */
-void generic_API::print_data() const
-{
-    // JsonArray array = m_data.as<JsonArray>();
-    // for(JsonObject task : array){
-    //     const char* content = task["content"];
-    //     Serial.println(content);
-    // }
-}
-
-/* Methods for the Todoist API */
+//////////////////////////////////////////////////////////////
+// Methods for the Todoist API
+//////////////////////////////////////////////////////////////
 void todoist_API::send_request()
 {
     // Check Wifi connection
@@ -58,5 +52,13 @@ void todoist_API::send_request()
     if(error){
         Serial.println("Error while extracting the data");
         return;
+    }
+}
+
+void todoist_API::print_data()
+{
+    for(JsonObject task : m_data.as<JsonArray>()){
+        const char* content = task["content"];
+        Serial.println(content);
     }
 }
