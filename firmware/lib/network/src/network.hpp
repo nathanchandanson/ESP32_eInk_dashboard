@@ -74,4 +74,16 @@ public:
     std::vector<todoist_task> get_tasks_from_label(const char* label);
 };
 
+/* Google calendar API class */
+class googleCalendar_API : public generic_API
+{
+private:
+
+public:
+    googleCalendar_API(): generic_API()
+    {}
+
+    void set_requestURL(String calendar_name, String time_min, String time_max)
+}
+
 #endif
