@@ -86,3 +86,52 @@ std::vector<todoist_task> todoist_API::get_tasks_from_label(const char* label)
 
     return res;
 }
+
+//////////////////////////////////////////////////////////////
+// Methods for the Google Calendar API
+//////////////////////////////////////////////////////////////
+void googleCalendar_API::set_access_token()
+{
+    HTTPClient http;
+    String post_data = "client_id=" + String(CALENDAR_API_CLIENT_ID) + 
+                     "&client_secret=" + String(CALENDAR_API_CLIENT_SECRET) +
+                     "&refresh_token=" + String(CALENDAR_API_REFRESH_TOKEN) +
+                     "&grant_type=refresh_token";
+  
+    http.begin("https://oauth2.googleapis.com/token");
+    http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    int httpResponseCode = http.POST(post_data);
+
+    // Erreur de récupération du token
+    if(httpResponseCode != 200){
+        Serial.println("Error while getting the Access Token from Google");
+        return;
+    }
+
+    // Extracting the access token 
+    String payload = http.getString();
+    JsonDocument doc;
+    deserializeJson(doc, payload);
+
+    m_access_token = doc["access_token"].as<String>();
+    Serial.println("Successfully retrieved and set the access token");
+    return;
+}
+
+void googleCalendar_API::generate_requestURL(int wanted_calendar, String timeMin, String timeMax)
+{
+    m_request_url = "https://www.googleapis.com/calendar/v3/calendars/";
+    switch (wanted_calendar)
+    {
+    case 1:
+        m_request_url = m_request_url + String(CALENDAR_API_FIRST_CALENDAR_URL);
+        break;
+    case 2:
+        m_request_url = m_request_url + String(CALENDAR_API_SECOND_CALENDAR_URL);
+        break;
+    default:
+        break;
+    }
+    m_request_url = m_request_url + "/events?timeMin=" + timeMin + "Z&timeMax=" + timeMax + "Z&singleEvents=true&orderBy=startTime";
+}

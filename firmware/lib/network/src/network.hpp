@@ -15,6 +15,7 @@
 //////////////////////////////////////////////////////////////
 int Wifi_connect();
 
+
 /////////////////////////////////////////////////////////////////////
 // Classes for the different integrations
 /////////////////////////////////////////////////////////////////////
@@ -35,6 +36,17 @@ public:
     std::vector<String> get_labels() const { return m_labels; }
     int get_priority() const { return m_priority; }
 };
+
+class calendar_event
+{
+private:
+    String m_name;
+    
+
+public:
+
+};
+
 
 //////////////////////////////////////////////////////////////
 // Classes for the APIs
@@ -78,12 +90,17 @@ public:
 class googleCalendar_API : public generic_API
 {
 private:
+    String m_access_token;
 
 public:
     googleCalendar_API(): generic_API()
     {}
 
-    void set_requestURL(String calendar_name, String time_min, String time_max)
-}
+    void set_access_token();
+    void generate_requestURL(int wanted_calendar, String timeMin, String timeMax);
+    void send_request();
+    void print_data();
+
+};
 
 #endif
